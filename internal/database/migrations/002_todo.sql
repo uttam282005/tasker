@@ -1,10 +1,10 @@
 CREATE TABLE todo_categories (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid()
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-  user_id TEXT NOT NULL
-  name TEXT NOT NULL
+  user_id TEXT NOT NULL,
+  name TEXT NOT NULL,
   color TEXT DEFAULT '#6b7280',
   description TEXT
 );
