@@ -43,6 +43,15 @@ type Todo struct {
 	SortOrder    int        `json:"sortOrder" db:"sort_order"`
 }
 
+type TodoStats struct {
+	Total     int `json:"total"`
+	Draft     int `json:"draft"`
+	Active    int `json:"active"`
+	Completed int `json:"completed"`
+	Archived  int `json:"archived"`
+	Overdue   int `json:"overdue"`
+}
+
 type Metadata struct {
 	Tags       []string `json:"tags"`
 	Reminder   *string  `json:"reminder"`
@@ -57,4 +66,8 @@ type PopulatedTodo struct {
 	Children    []Todo             `json:"children" db:"children"`
 	Comments    []comment.Comment  `json:"comments" db:"comments"`
 	Attachments []TodoAttachment   `json:"attachments" db:"attachments"`
+}
+
+func (t *Todo) CanHaveChildren() bool {
+	return t.ParentTodoID == nil
 }
