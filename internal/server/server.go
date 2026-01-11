@@ -91,7 +91,7 @@ func (s *Server) Start() error {
 	}
 
 	s.Logger.Info().
-		Str("port",s.Config.Server.Port).
+		Str("port", s.Config.Server.Port).
 		Str("env", s.Config.Primary.Env).
 		Msg("starting server")
 

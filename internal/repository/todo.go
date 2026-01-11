@@ -774,7 +774,6 @@ func (r *TodoRepository) ArchiveTodos(ctx context.Context, todoIDs []uuid.UUID) 
 	return nil
 }
 
-
 func (r *TodoRepository) GetCompletedTodosForUser(ctx context.Context, userID string,
 	startDate, endDate time.Time,
 ) ([]todo.PopulatedTodo, error) {

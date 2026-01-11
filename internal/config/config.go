@@ -11,7 +11,6 @@ import (
 	"github.com/rs/zerolog"
 )
 
-
 type Config struct {
 	Primary       Primary              `koanf:"primary" validate:"required"`
 	Server        ServerConfig         `koanf:"server" validate:"required"`
@@ -21,7 +20,7 @@ type Config struct {
 	Integration   IntegrationConfig    `koanf:"integration" validate:"required"`
 	Observability *ObservabilityConfig `koanf:"observability"`
 	// AWS           AWSConfig            `koanf:"aws" validate:"required"`
-	Cron          *CronConfig          `koanf:"cron"`
+	Cron *CronConfig `koanf:"cron"`
 }
 
 type Primary struct {

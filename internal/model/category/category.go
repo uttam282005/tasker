@@ -4,7 +4,7 @@ import "github.com/uttam282005/tasker/internal/model"
 
 type Category struct {
 	model.Base
-	
+
 	UserID      string  `json:"userId" db:"user_id"`
 	Name        string  `json:"name" db:"name"`
 	Color       string  `json:"color" db:"color"`
