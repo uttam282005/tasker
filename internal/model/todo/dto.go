@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+	"github.com/uttam282005/tasker/internal/model/category"
+	"github.com/uttam282005/tasker/internal/model/comment"
 )
 
 /*

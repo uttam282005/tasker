@@ -6,6 +6,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uttam282005/tasker/internal/model"
+	"github.com/uttam282005/tasker/internal/model/category"
+	"github.com/uttam282005/tasker/internal/model/comment"
 )
 
 type Status string
@@ -46,4 +48,13 @@ type Metadata struct {
 	Reminder   *string  `json:"reminder"`
 	Color      *string  `json:"color"`
 	Difficulty *int     `json:"difficulty"`
+}
+
+type PopulatedTodo struct {
+	Todo
+
+	Category    *category.Category `json:"category" db:"category"`
+	Children    []Todo             `json:"children" db:"children"`
+	Comments    []comment.Comment  `json:"comments" db:"comments"`
+	Attachments []TodoAttachment   `json:"attachments" db:"attachments"`
 }
