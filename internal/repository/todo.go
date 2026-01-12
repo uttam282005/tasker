@@ -774,6 +774,41 @@ func (r *TodoRepository) ArchiveTodos(ctx context.Context, todoIDs []uuid.UUID) 
 	return nil
 }
 
+func (r *TodoRepository) GetWeeklyStatsForUsers(ctx context.Context, startDate, endDate time.Time) ([]todo.UserWeeklyStats, error) {
+	stmt := `
+		SELECT
+			user_id,
+			COUNT(*) FILTER (WHERE created_at >= @start_date AND created_at <= @end_date) AS created_count,
+			COUNT(*) FILTER (WHERE status = 'completed' AND completed_at >= @start_date AND completed_at <= @end_date) AS completed_count,
+			COUNT(*) FILTER (WHERE status NOT IN ('completed', 'archived')) AS active_count,
+			COUNT(*) FILTER (WHERE due_date < NOW() AND status NOT IN ('completed', 'archived')) AS overdue_count
+		FROM
+			todos
+		GROUP BY
+			user_id
+		HAVING
+			COUNT(*) > 0
+	`
+
+	rows, err := r.server.DB.Pool.Query(ctx, stmt, pgx.NamedArgs{
+		"start_date": startDate,
+		"end_date":   endDate,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute get weekly stats query: %w", err)
+	}
+
+	stats, err := pgx.CollectRows(rows, pgx.RowToStructByName[todo.UserWeeklyStats])
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return []todo.UserWeeklyStats{}, nil
+		}
+		return nil, fmt.Errorf("failed to collect rows from table:todos: %w", err)
+	}
+
+	return stats, nil
+}
+
 func (r *TodoRepository) GetCompletedTodosForUser(ctx context.Context, userID string,
 	startDate, endDate time.Time,
 ) ([]todo.PopulatedTodo, error) {
