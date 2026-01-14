@@ -1,6 +1,9 @@
 package service
 
 import (
+	"fmt"
+
+	"github.com/uttam282005/tasker/internal/lib/aws"
 	"github.com/uttam282005/tasker/internal/lib/job"
 	"github.com/uttam282005/tasker/internal/repository"
 	"github.com/uttam282005/tasker/internal/server"
@@ -17,10 +20,17 @@ type Services struct {
 func NewServices(s *server.Server, repos *repository.Repositories) (*Services, error) {
 	authService := NewAuthService(s)
 
+	s.Job.SetAuthService(authService)
+
+	awsClient, err := aws.NewAWS(s)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create AWS client: %w", err)
+	}
+
 	return &Services{
 		Job:      s.Job,
 		Auth:     authService,
-		Todo:     NewTodoService(s, repos.Todo, repos.Category),
+		Todo:     NewTodoService(s, repos.Todo, repos.Category, awsClient),
 		Comment:  NewCommentService(s, repos.Comment, repos.Todo),
 		Category: NewCategoryService(s, repos.Category),
 	}, nil
